@@ -88,6 +88,7 @@ ofxMesh ofxFontExtruder::getCharacterMesh(char letter) {
     return ofxMesh(sides.addMesh(bottom.addMesh(top)));
 }
 
+#if (STL_EXPORT)
 void ofxFontExtruder::saveStl(string filename, bool isAscii) {
     
     float w = 100; //in mm
@@ -118,8 +119,9 @@ void ofxFontExtruder::saveStl(string filename, bool isAscii) {
     stl.useASCIIFormat(isAscii);
     stl.saveModel(filename);
 }
+#endif
 
-
+#if (GCODE_EXPORT)
 void ofxFontExtruder::saveGCode(string filename, string headerFile, string footerFile) {
     
     ofxGCode gcode;
@@ -180,4 +182,4 @@ void ofxFontExtruder::saveGCode(string filename, string headerFile, string foote
     
     gcode.save(filename);
 }
-
+#endif

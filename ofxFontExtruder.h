@@ -7,10 +7,17 @@
 
 #pragma once
 
+#define STL_EXPORT      0
+#define GCODE_EXPORT    0
+
 #include "ofMain.h"
 #include "ofxMesh.h"
-#include "ofxSTL.h"
-#include "ofxGCode.h"
+#if (STL_EXPORT)
+    #include "ofxSTL.h"
+#endif
+#if (GCODE_EXPORT)
+    #include "ofxGCode.h"
+#endif
 
 class ofxFontExtruder : public ofTrueTypeFont {
 public:
@@ -28,9 +35,13 @@ public:
     
     void setThickness(float thickness) { this->thickness = thickness; }
     float &getThickness() { return thickness; }
-    
+
+#if (GCODE_EXPORT)
     void saveGCode(string filename, string headerFile="start.gcode", string footerFile="end.gcode");
+#endif
+#if (STL_EXPORT)
     void saveStl(string filename, bool isAscii=true);
+#endif
 
 protected:
     ofxMesh getCharacterMesh(char letter);
