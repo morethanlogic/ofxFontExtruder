@@ -47,6 +47,26 @@ ofxMesh ofxFontExtruder::getMesh() {
     return mesh;
 }
 
+ofxMesh ofxFontExtruder::getTopBottomMesh() {
+    ofxMesh mesh;
+    for (int i=0; i<text.length(); i++) {
+        ofxMesh ch = getCharacterTopBottomMesh(text[i]);
+        ch.translate(getCharacterOffset(text,i));
+        mesh.addMesh(ch);
+    }
+    return mesh;
+}
+
+ofxMesh ofxFontExtruder::getSidesMesh() {
+    ofxMesh mesh;
+    for (int i=0; i<text.length(); i++) {
+        ofxMesh ch = getCharacterSidesMesh(text[i]);
+        ch.translate(getCharacterOffset(text,i));
+        mesh.addMesh(ch);
+    }
+    return mesh;
+}
+
 ofxMesh ofxFontExtruder::getCharacterMesh(char letter) {
     if (letter==' ') return ofxMesh();
     
@@ -86,6 +106,60 @@ ofxMesh ofxFontExtruder::getCharacterMesh(char letter) {
     }
     
     return ofxMesh(sides.addMesh(bottom.addMesh(top)));
+}
+
+ofxMesh ofxFontExtruder::getCharacterTopBottomMesh(char letter) {
+    if (letter==' ') return ofxMesh();
+    
+    ofVec3f zOffset(0,0,thickness);
+    
+    ofPath ch = getCharacterAsPoints(letter);
+    
+    vector<ofPolyline> outline = ch.getOutline();
+    
+    ofxMesh *tess = (ofxMesh*) &ch.getTessellation();
+    ofxMesh top = *tess; //copy
+    ofxMesh bottom = top; //copy
+    
+    bottom.translate(zOffset); //extrude
+    
+    //add top & bottom normals
+    for (int i=0; i<top.getNumVertices(); i++) {
+        top.addNormal(ofVec3f(0,0,-1));
+        bottom.addNormal(ofVec3f(0,0,1));
+    }
+    
+    return ofxMesh(bottom.addMesh(top));
+}
+
+ofxMesh ofxFontExtruder::getCharacterSidesMesh(char letter) {
+    if (letter==' ') return ofxMesh();
+    
+    ofVec3f zOffset(0,0,thickness);
+    
+    ofPath ch = getCharacterAsPoints(letter);
+    
+    vector<ofPolyline> outline = ch.getOutline();
+    
+    ofxMesh sides;
+    
+    //make side mesh by using outlines
+    for (int j=0; j<outline.size(); j++) {
+        
+        int iMax = outline[j].getVertices().size();
+        
+        for (int i=0; i<iMax; i++) {
+            
+            ofVec3f a = outline[j].getVertices()[i];
+            ofVec3f b = outline[j].getVertices()[i] + zOffset;
+            ofVec3f c = outline[j].getVertices()[(i+1) % iMax] + zOffset;
+            ofVec3f d = outline[j].getVertices()[(i+1) % iMax];
+            
+            sides.addFace(a,b,c,d);                          
+        }
+    }
+    
+    return sides;
 }
 
 #if (STL_EXPORT)

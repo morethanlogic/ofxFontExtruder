@@ -29,6 +29,8 @@ public:
     
     ofRectangle getBounds();    
     ofxMesh getMesh();
+    ofxMesh getTopBottomMesh();
+    ofxMesh getSidesMesh();
 
     void setText(string text) { this->text = text; }
     string &getText() { return text; }
@@ -45,6 +47,8 @@ public:
 
 protected:
     ofxMesh getCharacterMesh(char letter);
+    ofxMesh getCharacterTopBottomMesh(char letter);
+    ofxMesh getCharacterSidesMesh(char letter);
     ofRectangle getStringBoundingBox(string s);
     ofVec2f getCharacterOffset(string s, int index);
 
