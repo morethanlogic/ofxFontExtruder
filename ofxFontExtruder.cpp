@@ -11,6 +11,10 @@ ofRectangle ofxFontExtruder::getStringBoundingBox(string s) {
     ofRectangle bounds = ofTrueTypeFont::getStringBoundingBox(s,0,0);
 
     int i=s.length();
+    
+    if (i==0) {
+        return bounds;
+    }   
 
     while (i>=0 && s[--i]==' ') {
         bounds.width += cps[(int)'p' - NUM_CHARACTER_TO_START].width;
