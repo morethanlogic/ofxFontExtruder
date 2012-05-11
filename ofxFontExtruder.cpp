@@ -74,9 +74,12 @@ ofxMesh ofxFontExtruder::getSidesMesh() {
 ofxMesh ofxFontExtruder::getCharacterMesh(char letter) {
     if (letter==' ') return ofxMesh();
     
+    int letterForReal = (int)letter;
+    if (letterForReal < 0) letterForReal += 256;
+    
     ofVec3f zOffset(0,0,thickness);
         
-    ofPath ch = getCharacterAsPoints(letter);
+    ofPath ch = getCharacterAsPoints(letterForReal);
     
     vector<ofPolyline> outline = ch.getOutline();
     
@@ -115,9 +118,12 @@ ofxMesh ofxFontExtruder::getCharacterMesh(char letter) {
 ofxMesh ofxFontExtruder::getCharacterTopBottomMesh(char letter) {
     if (letter==' ') return ofxMesh();
     
+    int letterForReal = (int)letter;
+    if (letterForReal < 0) letterForReal += 256;
+    
     ofVec3f zOffset(0,0,thickness);
     
-    ofPath ch = getCharacterAsPoints(letter);
+    ofPath ch = getCharacterAsPoints(letterForReal);
     
     vector<ofPolyline> outline = ch.getOutline();
     
@@ -139,9 +145,12 @@ ofxMesh ofxFontExtruder::getCharacterTopBottomMesh(char letter) {
 ofxMesh ofxFontExtruder::getCharacterSidesMesh(char letter) {
     if (letter==' ') return ofxMesh();
     
+    int letterForReal = (int)letter;
+    if (letterForReal < 0) letterForReal += 256;
+    
     ofVec3f zOffset(0,0,thickness);
     
-    ofPath ch = getCharacterAsPoints(letter);
+    ofPath ch = getCharacterAsPoints(letterForReal);
     
     vector<ofPolyline> outline = ch.getOutline();
     
